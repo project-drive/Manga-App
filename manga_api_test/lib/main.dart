@@ -25,9 +25,9 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['manga'][50]['i'],
-      title: json['manga'][50]['t'],
-      image: json['manga'][50]['im'],
+      id: json['manga'][49]['i'],
+      title: json['manga'][49]['t'],
+      image: json['manga'][49]['im'],
     );
   }
 }
