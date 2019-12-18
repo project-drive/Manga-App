@@ -14,14 +14,32 @@ class MangaMenu extends StatefulWidget {
 
 class MangaMenuState extends State<MangaMenu> {
   //
-  gridView(AsyncSnapshot <List<Manga>> snapshot){
+  gridView(AsyncSnapshot<List<Manga>> snapshot) {
     //
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: GridView.count(
+        crossAxisCount: 2,
+        childAspectRatio: 1.0,
+        mainAxisSpacing: 4.0,
+        crossAxisSpacing: 4.0,
+        children: snapshot.data.map((manga) {
+          return GestureDetector(
+            child: GridTile(
+              child: MangaCell(manga),
+            ),
+          );
+        }).toList(),
+      ),
+    );
   }
-  circularProgress(){
+
+  circularProgress() {
     return Center(
       child: CircularProgressIndicator(),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,13 +59,11 @@ class MangaMenuState extends State<MangaMenu> {
                     return Text('Error ${snapshot.error}');
                   }
                   //
-                  if (snapshot.hasData){
+                  if (snapshot.hasData) {
                     //gridview
                     return gridView(snapshot);
                   }
                   return circularProgress();
-
-
                 },
               ),
             )
