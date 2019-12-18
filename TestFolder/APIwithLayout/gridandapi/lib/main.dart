@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/src/material/colors.dart';
+
 
 Future<Post> fetchPost() async {
   final response = await http.get('https://www.mangaeden.com/api/list/0/');
@@ -53,12 +55,18 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Manga Reader(PD)',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: Scaffold(
+        backgroundColor: Colors.black,
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('Manga Reader(PD)'),
+          title: Text(
+            'Manga Reader(PD)',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
         body: Center(
           child: FutureBuilder<Post>(
@@ -72,19 +80,33 @@ class _MyAppState extends State<MyApp> {
                   // Generate 100 widgets that display their index in the List.
                   children: List.generate(snapshot.data.total, (index) {
                     return Center(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                              width: 180,
-                              height: 180,
-                              child: snapshot.data.manga[index]['im'] == null
-                                  ? Image.asset('images/cnf.jpg')
-                                  : Image.network(
-                                      'https://cdn.mangaeden.com/mangasimg/' +
-                                          snapshot.data.manga[index]['im'])),
-                          Container(
-                              child: Text(snapshot.data.manga[index]['t'])),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                                // color: Colors.black,
+                                // width: 180,
+                                // height: 180,
+                                child: snapshot.data.manga[index]['im'] == null
+                                    ? Image.asset('images/cnf.jpg')
+                                    : Image.network(
+                                        'https://cdn.mangaeden.com/mangasimg/' +
+                                            snapshot.data.manga[index]['im'])),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                color: Colors.black,
+                                child: Text(
+                                  snapshot.data.manga[index]['t'],
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }),
