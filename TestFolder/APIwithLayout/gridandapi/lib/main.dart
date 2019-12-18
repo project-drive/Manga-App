@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 Future<Post> fetchPost() async {
   final response = await http.get('https://www.mangaeden.com/api/list/0/');
-  print(response.body);
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON.
@@ -18,17 +17,15 @@ Future<Post> fetchPost() async {
 }
 
 class Post {
-  final String id;
-  final String title;
-  final String image;
+  final int total;
+  final List manga;
 
-  Post({this.id, this.title, this.image});
+  Post({this.total, this.manga});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['manga'][49]['i'],
-      title: json['manga'][49]['t'],
-      image: json['manga'][49]['im'],
+      total: json['total'],
+      manga: json['manga'],
     );
   }
 }
@@ -53,38 +50,35 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    const String imglink = 'http://cdn.mangaeden.com/mangasimg/';
     return MaterialApp(
-      title: 'Fetch Data Example',
+      title: 'Manga Reader(PD)',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Fetch Data Example'),
+          title: Text('Manga Reader(PD)'),
         ),
         body: Center(
           child: FutureBuilder<Post>(
             future: post,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        snapshot.data.title,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                return GridView.count(
+                  // Create a grid with 2 columns. If you change the scrollDirection to
+                  // horizontal, this produces 2 rows.
+                  crossAxisCount: 2,
+                  // Generate 100 widgets that display their index in the List.
+                  children: List.generate(snapshot.data.total, (index) {
+                    return Center(
+                      child: Column(
                         children: <Widget>[
-                          Image.network(
-                            imglink+snapshot.data.image,
-                          ),
+                          snapshot.data.manga[index]['im'] == null? Image.asset('images/cnf.jpg'):Image.network('https://cdn.mangaeden.com/mangasimg/'+snapshot.data.manga[index]['im']),
+                          Text(snapshot.data.manga[index]['t']),
                         ],
                       ),
-                    ],
-                  ),
+                    );
+                  }),
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
@@ -99,3 +93,17 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// return ListView.builder(
+//                   itemCount: snapshot.data.total,
+//                   itemBuilder: (BuildContext context, int index) {
+//                     return Container(child: Column(
+//                       children: <Widget>[
+//                         Text(snapshot.data.manga[index]['t']),
+//                         snapshot.data.manga[index]['im'] == null? Image.asset('images/cnf.jpg'):Image.network('https://cdn.mangaeden.com/mangasimg/'+snapshot.data.manga[index]['im'])
+
+//                       ],
+//                     ),
+//                     );
+//                   },
+//                 );
