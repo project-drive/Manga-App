@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Manga Reader(PD)'),
         ),
@@ -73,8 +74,16 @@ class _MyAppState extends State<MyApp> {
                     return Center(
                       child: Column(
                         children: <Widget>[
-                          snapshot.data.manga[index]['im'] == null? Image.asset('images/cnf.jpg'):Image.network('https://cdn.mangaeden.com/mangasimg/'+snapshot.data.manga[index]['im']),
-                          Text(snapshot.data.manga[index]['t']),
+                          Container(
+                              width: 180,
+                              height: 180,
+                              child: snapshot.data.manga[index]['im'] == null
+                                  ? Image.asset('images/cnf.jpg')
+                                  : Image.network(
+                                      'https://cdn.mangaeden.com/mangasimg/' +
+                                          snapshot.data.manga[index]['im'])),
+                          Container(
+                              child: Text(snapshot.data.manga[index]['t'])),
                         ],
                       ),
                     );
