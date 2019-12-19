@@ -7,9 +7,9 @@ class Manga{
   
   factory Manga.fromJson(Map<String, dynamic> json){
     return Manga(
-      index: json['manga'],
-      title: json['manga']['t'],
-      img: json['manga']['img'],
+      index: json['manga'][0],
+      title: json['manga'[40]]['t'],
+      img: json['manga'[40]]['img'],
     );
   }
 }
